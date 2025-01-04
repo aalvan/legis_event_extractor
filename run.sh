@@ -164,7 +164,7 @@ function setup_services {
     echo "AIRFLOW_UID=$(id -u)" > src/airflow/.env  # Save the .env file in the Airflow directory
 
     echo "Initializing Airflow..."
-    (cd src/airflow && docker-compose -f airflow.docker-compose.yaml up airflow-init)
+    (cd src/airflow && docker compose -f airflow.docker-compose.yaml up airflow-init)
 
     echo "Airflow setup completed."
 }

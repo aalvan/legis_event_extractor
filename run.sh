@@ -171,7 +171,7 @@ function setup_services {
 
 function start_airflow {
     echo "Starting Airflow services..."
-    (cd src/airflow && docker-compose -f airflow.docker-compose.yaml up -d --build)
+    (cd src/airflow && docker compose -f airflow.docker-compose.yaml up -d --build)
 
     echo "Waiting for Airflow webserver to be reachable..."
     # Poll Airflow webserver until it responds with HTTP 200
@@ -185,7 +185,7 @@ function start_airflow {
 
 function stop_services {
     echo "Stopping all Docker containers..."
-    (cd src/airflow && docker-compose -f airflow.docker-compose.yaml down)
+    (cd src/airflow && docker compose -f airflow.docker-compose.yaml down)
 	echo "All containers have been stopped."
 }
 TIMEFORMAT="Task completed in %3lR"

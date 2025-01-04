@@ -48,3 +48,12 @@ test:
 
 test-wheel-locally:
 	bash run.sh test:wheel-locally
+
+setup_services:
+	bash run.sh setup_services
+
+start_airflow:
+	bash run.sh start_airflow
+
+stop_services:
+	bash run.sh stop_services

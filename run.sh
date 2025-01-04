@@ -156,5 +156,37 @@ function help {
     compgen -A function | cat -n
 }
 
+function setup_services {
+    echo "Creating shared Docker network if it doesn't exist..."
+    docker network create shared_network || true  # Ignore error if the network exists
+
+    echo "Creating .env file with AIRFLOW_UID..."
+    echo "AIRFLOW_UID=$(id -u)" > src/airflow/.env  # Save the .env file in the Airflow directory
+
+    echo "Initializing Airflow..."
+    (cd src/airflow && docker-compose -f airflow.docker-compose.yaml up airflow-init)
+
+    echo "Airflow setup completed."
+}
+
+function start_airflow {
+    echo "Starting Airflow services..."
+    (cd src/airflow && docker-compose -f airflow.docker-compose.yaml up -d --build)
+
+    echo "Waiting for Airflow webserver to be reachable..."
+    # Poll Airflow webserver until it responds with HTTP 200
+    until curl --silent --fail --output /dev/null http://localhost:8080/health; do
+        echo "Airflow webserver is not ready yet. Retrying..."
+        sleep 5
+    done
+
+    echo "Airflow is running and accessible at http://localhost:8080"
+}
+
+function stop_services {
+    echo "Stopping all Docker containers..."
+    (cd src/airflow && docker-compose -f airflow.docker-compose.yaml down)
+	echo "All containers have been stopped."
+}
 TIMEFORMAT="Task completed in %3lR"
 time ${@:-help}

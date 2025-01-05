@@ -5,7 +5,7 @@
 [project]
 name = "legis-event-extractor"
 description = "My package description"
-authors = [{ name = "<your name>", email = "some-email@gmail.com" }]
+authors = [{ name = "Alexis Alva", email = "alexis.alvajn@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "MIT" }
@@ -22,6 +22,7 @@ version = { file = "version.txt" }
 
 # optional dependencies can be installed with square brackets, e.g. `pip install my-package[test,static-code-qa]`
 [project.optional-dependencies]
+notebooks = ["datasets", "jupyterlab", "ipykernel", "rich", "spacy", "numpy"]
 test = ["pytest", "pytest-cov"]
 release = ["build", "twine"]
 static-code-qa = [
@@ -39,7 +40,7 @@ static-code-qa = [
 # - automatically apply formatting
 # - show enhanced autocompletion for stubs libraries
 # See .vscode/settings.json to see how VS Code is configured to use these tools
-dev = ["legis-event-extractor[test,release,static-code-qa]"]
+dev = ["legis-event-extractor[test,release,static-code-qa,notebooks]"]
 
 [build-system]
 # Minimum requirements for the build system to execute.

@@ -1,4 +1,4 @@
-def toSpacy(dataSet):
+def to_spacy(dataSet):
     spacy_data = []
     for entry in dataSet:
         text = str(entry['text']) 
@@ -6,7 +6,7 @@ def toSpacy(dataSet):
         spacy_data.append((text, {"entities": entities}))
     return spacy_data
 
-def SpacytoConLL(dataset):
+def spacy_to_conll(dataset):
     """
     Convierte un archivo JSON con texto y etiquetas a formato CoNLL usando spaCy.
     Args:
@@ -47,3 +47,23 @@ def SpacytoConLL(dataset):
         
         conLLData.append(connTexto)
     return conLLData
+
+def align_offsets_to_tokens(doc, entities):
+    """
+    Alinea los offsets de las entidades a los límites de los tokens generados por spaCy.
+    """
+    aligned_entities = []
+    for start, end, label in entities:
+        token_start = None
+        token_end = None
+        for token in doc:
+            # Encontrar el token que contiene el inicio de la entidad
+            if token.idx <= start < token.idx + len(token.text):
+                token_start = token.idx
+            # Encontrar el token que contiene el final de la entidad
+            if token.idx < end <= token.idx + len(token.text):
+                token_end = token.idx + len(token.text)
+        # Si ambos límites están definidos, añadir la entidad ajustada
+        if token_start is not None and token_end is not None:
+            aligned_entities.append((token_start, token_end, label))
+    return aligned_entities

@@ -22,7 +22,18 @@ version = { file = "version.txt" }
 
 # optional dependencies can be installed with square brackets, e.g. `pip install my-package[test,static-code-qa]`
 [project.optional-dependencies]
-notebooks = ["datasets", "jupyterlab", "ipykernel", "rich", "spacy", "numpy"]
+notebooks = [
+    "datasets",
+    "jupyterlab",
+    "ipykernel",
+    "rich",
+    "spacy",
+    "numpy",
+    "transformers",
+    "scikit-learn",
+    "torch",
+    "transformers[torch]",
+]
 test = ["pytest", "pytest-cov"]
 release = ["build", "twine"]
 static-code-qa = [

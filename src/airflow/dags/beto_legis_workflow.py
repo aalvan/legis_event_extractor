@@ -232,7 +232,7 @@ def _tokenize_and_prepare_dataset():
 
 @task.virtualenv(
     task_id="train_model",
-    requirements=["transformers", "datasets", "scikit-learn"],
+    requirements=["transformers", "datasets", "scikit-learn", "torch"],
     venv_cache_path="/tmp/venv_cache"
 )
 def _train_model():

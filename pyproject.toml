@@ -9,7 +9,7 @@ authors = [{ name = "Alexis Alva", email = "alexis.alvajn@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "MIT" }
-dependencies = []
+dependencies = ["fastapi[standard]", "pydantic", "torch", "safetensors"]
 classifiers = ["Programming Language :: Python :: 3"]
 keywords = ["one", "two"]
 
@@ -31,10 +31,9 @@ notebooks = [
     "numpy",
     "transformers",
     "scikit-learn",
-    "torch",
     "transformers[torch]",
 ]
-test = ["pytest", "pytest-cov"]
+test = ["pytest", "pytest-cov", "requests", "uvicorn"]
 release = ["build", "twine"]
 static-code-qa = [
     "pre-commit",

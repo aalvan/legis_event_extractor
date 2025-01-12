@@ -9,7 +9,18 @@ authors = [{ name = "Alexis Alva", email = "alexis.alvajn@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "MIT" }
-dependencies = ["fastapi[standard]", "pydantic", "torch", "safetensors"]
+dependencies = [
+    "fastapi[standard]",
+    "pydantic",
+    "torch",
+    "safetensors",
+    "openai-whisper",
+    "opencv-python",
+    "insightface",
+    "onnxruntime",
+    "sentence_transformers",
+    "moviepy",
+]
 classifiers = ["Programming Language :: Python :: 3"]
 keywords = ["one", "two"]
 

@@ -3,38 +3,38 @@ from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 import torch
 
-id2label = {
-    0: 'B-AUTOR',
-    1: 'B-DESTINO',
-    2: 'B-EVENTO',
-    3: 'B-MATERIA',
-    4: 'I-AUTOR',
-    5: 'I-DESTINO',
-    6: 'I-EVENTO',
-    7: 'I-MATERIA',
-    8: 'O'
-}
-label2id = {v: k for k, v in id2label.items()}
-MODEL_PATH = '/workspaces/legis_event_extractor/models/ner_output/checkpoint-90'
-model = AutoModelForTokenClassification.from_pretrained(MODEL_PATH, local_files_only=True)
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, local_files_only=True)
-
-model.config.id2label = id2label
-model.config.label2id = label2id
-
 app = FastAPI()
-class PredictionRequest(BaseModel):
+class PrmVideoFilePath(BaseModel):
     text: str
 
 @app.post("/predict")
-async def predict(request: PredictionRequest):
-    inputs = tokenizer(request.text, padding=True, return_tensors="pt")
+async def predict(request: PrmVideoFilePath):
+    print("transcription Start")
+    transcripcionSegments,transcripcionText  = Transcripcion(request)
+    print("speakers Start")
+    speachers= FaceReconigtion(prmVideoFilePath)
+    print("CleanText Start")
+    texto=CleanText(transcripcionText,prmVideoFilePath)
+    if prmModel=="spacy":
+        print("SpacyNER Start")
+        Entities= SpacyNER(texto,prmVideoFilePath)
+    if prmModel=="beto":
+        print("BetoNER Start")
+        Entities= BetoNER(texto,prmVideoFilePath)
 
-    with torch.no_grad():
-        outputs = model(**inputs)
-        logits = outputs.logits
+    # Cargar el archivo de video
+    video = VideoFileClip(prmVideoFilePath)
+    autores = getAutores(Entities)
+    for autor in autores:
+        autor.segments = getOficios(autor.segments)
+    autoresData = getAutoresData(autores,transcripcionSegments, speachers)
+    discursos = getDiscursos(autoresData)
+    output_data = {"sesion": prmTitle,
+                  "videoURL": "https://fake.com/"+prmVideoFilePath,
+                  "texto":texto,
+                  "duracioVideo" : {"start" : 0, "end" : video.duration } ,
+                  "discursos" : discursos}
+    with open(prmVideoFilePath +".output.json", 'w', encoding="utf-8") as newf:
+        json.dump(output_data, newf, ensure_ascii=False, indent=4)
 
-    predicted_labels = logits.argmax(dim=-1)
-    predicted_labels_text = [id2label[label] for label in predicted_labels[0]]
-
-    return {"predictions": predicted_labels_text}
+    return {"sesion": prmTitle}
